@@ -1,7 +1,6 @@
-use user::User;
 pub mod user;
 fn main() {
-    let user = User::build_user("duai", "duaifzn@gmail.com");
+    let user1 = user::User::build_user("duai", "duaifzn@gmail.com");
     
-    dbg!(user);
+    dbg!(user1);
 }
