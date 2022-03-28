@@ -1,11 +1,10 @@
-use mongodb::bson::{doc, Document};
+use mongodb::bson::{doc};
 use crate::database::Mongo;
-use crate::model::test_model;
 
-pub async fn create_one_test(){
-    let db = Mongo::connect().await;
-    let todo = test_model::Test {
-        name: "test".to_string(),
-        done: "sss".to_string(),
-    };
-}
+// pub async fn create_one_test(){
+//     DB.test.insert_one(doc! {
+//         name: "test".to_string(),
+//         done: "sss".to_string(),
+//     }, None).await
+
+// }
