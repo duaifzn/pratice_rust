@@ -1,8 +1,9 @@
 use crate::{service::todo_service, database::Mongo};
 use rocket::{serde::json::{Json, json}, State};
 use crate::dto::response_dto::ApiResponse;
-use crate::dto::request_dto::{TodoDto, UpdateTodoDto};
-
+use crate::dto::request_dto::{TodoDto, UpdateTodoDto, UserDto};
+use crate::service::user_service;
+use crate::service::user_service::have_one_user;
 #[get("/hello1/<name>/<done>")]
 pub async fn hello1(name: String, done: bool) -> String{
     //let data  = todo_service::create_one_todo().await.unwrap();
@@ -74,5 +75,46 @@ pub async fn update_todo(db: &State<Mongo>, todo: Json<UpdateTodoDto>) -> ApiRes
                 "error": err.to_string()
             })
         },
+    }
+}
+
+#[post("/sign", format = "json", data = "<user>")]
+pub async fn sign_user(db: &State<Mongo>, user: Json<UserDto>) ->ApiResponse{
+    if have_one_user(db, &user).await == true{
+        return ApiResponse{
+            json: json!({
+                "error": "duplicate".to_string()
+            })
+        }
+    }
+    let data = user_service::insert_one_user(db, user).await;
+    match data{
+        Ok(result) => ApiResponse{
+            json: json!({
+                "id": result
+            })
+        },
+        Err(err) => ApiResponse{
+            json: json!({
+                "error": err.to_string()
+            })
+        }
+    }
+}
+
+#[post("/login", format = "json", data = "<user>")]
+pub async fn login_user(db: &State<Mongo>, user: Json<UserDto>) ->ApiResponse{
+    let data = user_service::verify_one_user(db, user).await;
+    match data{
+        Ok(result) => ApiResponse{
+            json: json!({
+                "verify": result
+            })
+        },
+        Err(err) => ApiResponse{
+            json: json!({
+                "error": err.to_string()
+            })
+        }
     }
 }

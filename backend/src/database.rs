@@ -1,11 +1,13 @@
 use crate::model::todo_model::TodoSchema;
 use crate::model::test_model::TestSchema;
+use crate::model::user_model::UserSchema;
 use mongodb::{Client, options::ClientOptions};
 use mongodb::Collection;
 
 pub struct Mongo{
     pub Todo: Collection<TodoSchema>,
     pub Test: Collection<TestSchema>,
+    pub User: Collection<UserSchema>,
 }
 
 impl Mongo{
@@ -26,6 +28,7 @@ impl Mongo{
         Mongo{
             Todo: db.collection::<TodoSchema>("todos"),
             Test: db.collection::<TestSchema>("tests"),
+            User: db.collection::<UserSchema>("users"),
         }
     }
 }

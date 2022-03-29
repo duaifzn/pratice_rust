@@ -13,3 +13,10 @@ pub struct UpdateTodoDto{
     pub name: String,
     pub done: bool,
 }
+
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(crate = "rocket::serde")]
+pub struct UserDto{
+    pub email: String,
+    pub password: String,
+}

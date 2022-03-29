@@ -1,4 +1,4 @@
-use mongodb::{bson, bson::doc};
+use mongodb::{bson::doc};
 use mongodb::bson::oid::ObjectId;
 use mongodb::results::{InsertOneResult, DeleteResult, UpdateResult};
 use mongodb::error::Result;
