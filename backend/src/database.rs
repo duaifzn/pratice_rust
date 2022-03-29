@@ -4,8 +4,8 @@ use mongodb::{Client, options::ClientOptions};
 use mongodb::Collection;
 
 pub struct Mongo{
-    pub todo: Collection<TodoSchema>,
-    pub test: Collection<TestSchema>,
+    pub Todo: Collection<TodoSchema>,
+    pub Test: Collection<TestSchema>,
 }
 
 impl Mongo{
@@ -24,8 +24,8 @@ impl Mongo{
         //     println!("{}", db_name);
         // }
         Mongo{
-            todo: db.collection::<TodoSchema>("todos"),
-            test: db.collection::<TestSchema>("tests"),
+            Todo: db.collection::<TodoSchema>("todos"),
+            Test: db.collection::<TestSchema>("tests"),
         }
     }
 }
