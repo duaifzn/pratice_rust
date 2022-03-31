@@ -10,8 +10,9 @@ mod database;
 mod model;
 mod service;
 mod dto;
-mod guard;
+mod middleware;
 mod util;
+mod config;
 
 #[launch]
 async fn rocket() -> _ {

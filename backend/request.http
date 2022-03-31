@@ -21,3 +21,14 @@ GET http://127.0.0.1:8000/user/todo/all HTTP/1.1
 Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE3NDg3MDYzMDN9.IChPk3Xkyr1rSUoLQpqFV0C8YpaZkpwdXIBVBoGmFWo
 
 ###
+
+POST http://127.0.0.1:8000/user/todo HTTP/1.1
+Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE3NDg3MDYzMDN9.IChPk3Xkyr1rSUoLQpqFV0C8YpaZkpwdXIBVBoGmFWo
+Content-Type: application/json
+
+{
+    "name": "123rrrrrrr",
+    "done": false
+}
+
+###

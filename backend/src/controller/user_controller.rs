@@ -5,7 +5,7 @@ use crate::dto::request_dto::{TodoDto, UpdateTodoDto, UserDto};
 use crate::service::user_service;
 use crate::service::user_service::have_one_user;
 use crate::util::auth::auth_token_generate;
-use crate::guard::auth_guard::Token;
+use crate::middleware::auth_guard::Token;
 
 #[get("/hello1/<name>/<done>")]
 pub async fn hello1(name: String, done: bool) -> String{
@@ -14,7 +14,7 @@ pub async fn hello1(name: String, done: bool) -> String{
 }
 
 #[post("/todo", format = "json", data = "<todo>")]
-pub async fn create_todo(db: &State<Mongo>, todo: Json<TodoDto>) -> ApiResponse {
+pub async fn create_todo(token: Token<'_>, db: &State<Mongo>, todo: Json<TodoDto>) -> ApiResponse {
     let data = todo_service::create_one_todo(db, todo).await;
      match data{
         Ok(result) => ApiResponse{
