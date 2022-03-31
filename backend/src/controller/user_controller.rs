@@ -4,6 +4,9 @@ use crate::dto::response_dto::ApiResponse;
 use crate::dto::request_dto::{TodoDto, UpdateTodoDto, UserDto};
 use crate::service::user_service;
 use crate::service::user_service::have_one_user;
+use crate::util::auth::auth_token_generate;
+use crate::guard::auth_guard::Token;
+
 #[get("/hello1/<name>/<done>")]
 pub async fn hello1(name: String, done: bool) -> String{
     //let data  = todo_service::create_one_todo().await.unwrap();
@@ -28,7 +31,7 @@ pub async fn create_todo(db: &State<Mongo>, todo: Json<TodoDto>) -> ApiResponse 
 }
 
 #[get("/todo/all")]
-pub async fn find_todo(db: &State<Mongo>) -> ApiResponse{
+pub async fn find_todo(token: Token<'_>, db: &State<Mongo>) -> ApiResponse{
     let data = todo_service::find_all_todo(db).await;
     match data{
         Ok(result) => ApiResponse{
@@ -105,10 +108,12 @@ pub async fn sign_user(db: &State<Mongo>, user: Json<UserDto>) ->ApiResponse{
 #[post("/login", format = "json", data = "<user>")]
 pub async fn login_user(db: &State<Mongo>, user: Json<UserDto>) ->ApiResponse{
     let data = user_service::verify_one_user(db, user).await;
+    let token = auth_token_generate();
     match data{
         Ok(result) => ApiResponse{
             json: json!({
-                "verify": result
+                "verify": result,
+                "token": token
             })
         },
         Err(err) => ApiResponse{

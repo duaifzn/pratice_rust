@@ -7,6 +7,7 @@ use bcrypt::{DEFAULT_COST, hash, verify};
 use crate::database::Mongo;
 use crate::dto::request_dto::UserDto;
 use crate::model::user_model::UserSchema;
+use crate::dto::role::Role;
 
 pub async fn have_one_user(db: &State<Mongo>, user: &Json<UserDto>) ->bool{
     let data = db.User.find_one(doc!{
@@ -25,6 +26,7 @@ pub async fn insert_one_user(db: &State<Mongo>, user: Json<UserDto>) ->Result<In
         id: None,
         email: user.email.to_string(),
         password: hashed,
+        role: Role::User as u8,
     };
     let data = db.User.insert_one(new_user, None).await?;
     Ok(data)
