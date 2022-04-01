@@ -1,8 +1,12 @@
+use rocket::serde::Serialize;
 use rocket::serde::json::Value;
 use rocket::response;
 use rocket::request::Request;
 use rocket::response::{Responder, Response};
 use rocket::http::{ContentType};
+use rocket_okapi::JsonSchema;
+#[derive(Serialize, JsonSchema)]
+#[serde(crate = "rocket::serde")]
 pub struct ApiResponse{
     pub json: Value
 }

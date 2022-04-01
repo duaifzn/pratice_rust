@@ -6,10 +6,13 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-rocket = { version = "0.5.0-rc.1", features = ["secrets", "tls", "json"] }
+rocket = { version = "0.5.0-rc.1", default-features = false, features = ["secrets", "tls", "json"] }
 jsonwebtoken = "8.0.1"
 bcrypt = "0.12.1"
 chrono = "0.4.19"
+schemars = "0.8"
+okapi = { version = "0.6.0-alpha-1" }
+rocket_okapi = { version = "0.8.0-alpha-1", features = ["swagger"] }
 
 [dependencies.mongodb]
 version = "2.1.0"
