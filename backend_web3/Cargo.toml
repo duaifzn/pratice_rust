@@ -1,0 +1,18 @@
+[package]
+name = "backend_web3"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+rocket = { version = "0.5.0-rc.1", default-features = false, features = [ "tls", "json"] }
+jsonwebtoken = "8.0.1"
+bcrypt = "0.12.1"
+chrono = { version = "0.4.19", features = ["serde"]}
+web3 = "0.18.0"
+
+[dependencies.mongodb]
+version = "2.1.0"
+default-features = false
+features = ["async-std-runtime"]
