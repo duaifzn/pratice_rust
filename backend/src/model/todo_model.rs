@@ -1,5 +1,7 @@
 use rocket::serde::{Serialize, Deserialize, Serializer};
+use rocket::serde::json::serde_json;
 use mongodb::bson::oid::ObjectId;
+use crate::dto::response_dto::TodoSchemaDto;
 
 pub fn serialize_object_id<S>(object_id: &Option<ObjectId>, serializer: S) -> Result<S::Ok, S::Error>
 where
@@ -19,4 +21,11 @@ pub struct TodoSchema {
     pub id: Option<ObjectId>,
     pub name: String,
     pub done: bool,
+}
+
+impl TodoSchema{
+    pub fn okapi_dto(&self) -> TodoSchemaDto{
+        let serialized = serde_json::to_string(self).unwrap();
+        serde_json::from_str(&serialized).unwrap()
+    }
 }

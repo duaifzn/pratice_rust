@@ -26,7 +26,8 @@ async fn rocket() -> _ {
         controller::user_controller::find_todo,
         controller::user_controller::update_todo,
         controller::user_controller::sign_user,
-        controller::user_controller::login_user])
+        controller::user_controller::login_user
+        ])
     .mount("/admin", openapi_get_routes![
         controller::admin_controller::hello])
     .mount(

@@ -1,5 +1,5 @@
 use rocket::serde::{Serialize, Deserialize};
-use rocket_okapi::okapi::schemars::JsonSchema;
+use rocket_okapi::JsonSchema;
 #[derive(Debug, Serialize, Deserialize, JsonSchema)]
 #[serde(crate = "rocket::serde")]
 pub struct TodoDto{
@@ -9,7 +9,7 @@ pub struct TodoDto{
 
 #[derive(Debug, Serialize, Deserialize, JsonSchema)]
 #[serde(crate = "rocket::serde")]
-pub struct UpdateTodoDto{
+pub struct UpdateOneTodoDto{
     pub id: String,
     pub name: String,
     pub done: bool,

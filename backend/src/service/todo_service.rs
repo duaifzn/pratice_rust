@@ -7,7 +7,7 @@ use rocket::futures::{TryStreamExt};
 use rocket::serde::json::{Json};
 use crate::database::Mongo;
 use crate::model::todo_model::TodoSchema;
-use crate::dto::request_dto::{TodoDto, UpdateTodoDto};
+use crate::dto::request_dto::{TodoDto, UpdateOneTodoDto};
 
 pub async fn create_one_todo(db: &State<Mongo>, todo: Json<TodoDto>) ->Result<InsertOneResult>{
     let new_todo = TodoSchema{
@@ -31,7 +31,7 @@ pub async fn find_all_todo(db: &State<Mongo>) ->Result<Vec<TodoSchema>>{
     Ok(data)
 }
 
-pub async fn update_one_todo(db: &State<Mongo>, todo: Json<UpdateTodoDto>) ->Result<UpdateResult>{
+pub async fn update_one_todo(db: &State<Mongo>, todo: Json<UpdateOneTodoDto>) ->Result<UpdateResult>{
     let data = db.Todo.update_one(
         doc!{
             "_id": todo.id.to_string()
