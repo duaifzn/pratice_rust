@@ -59,12 +59,13 @@ impl OpensslGenerator{
         let pkey = include_bytes!("../key.pem");
         let private_key = Rsa::private_key_from_pem(pkey).unwrap();
         let mut result = vec![0; private_key.size() as usize];
+        println!("{:?}", result);
         let original_data = b"This is test";
         let len = private_key
             .private_encrypt(original_data, &mut result, Padding::PKCS1)
             .unwrap();
         assert_eq!(len, 256);
-
+        println!("{:?}", std::str::from_utf8(&result));
         let key = include_bytes!("../key.pub.pem");
         let public_key = Rsa::public_key_from_pem(key).unwrap();
         let mut dec_result = vec![0; public_key.size() as usize];
@@ -76,6 +77,7 @@ impl OpensslGenerator{
         assert_eq!(&dec_result[..len], original_data);
     }
     pub fn pub_encryp_priv_decryp(){
+        //same as openssl::encrypt::{Encrypter, Decrypter}
         let key = include_bytes!("../key.pub.pem");
         let public_key = Rsa::public_key_from_pem(key).unwrap();
         let mut result = vec![0; public_key.size() as usize];
@@ -95,5 +97,7 @@ impl OpensslGenerator{
         println!("{:?}", std::str::from_utf8(&dec_result[..len]));
         assert_eq!(&dec_result[..len], original_data);
     }
+    //rsa digital signature
+    //use openssl::sign::{Signer, Verifier};
 }
 
