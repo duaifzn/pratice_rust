@@ -3,9 +3,8 @@ use openssl::{
         PKey,
         Private
     },
-    rsa::Rsa, x509::{X509Name, X509}, nid::Nid, hash::MessageDigest, asn1::Asn1Time
+    rsa::{Rsa, Padding}, x509::{X509Name, X509}, nid::Nid, hash::MessageDigest, asn1::Asn1Time,
 };
-use core::str;
 use std::{fs::File, io::Write};
 pub struct OpensslGenerator{
     keypair: PKey<Private>
@@ -28,7 +27,7 @@ impl OpensslGenerator{
         let mut file = File::create("key.pub.pem").unwrap();
         file.write_all(&public_key);
     }
-    pub fn generate_csr_file(&self){
+    pub fn generate_crt_file(&self){
         let mut name = X509Name::builder().unwrap();
         name.append_entry_by_nid(Nid::COMMONNAME, "foobar.com").unwrap();
         let name = name.build();
@@ -50,6 +49,51 @@ impl OpensslGenerator{
         // println!("{}", std::str::from_utf8(&csr_key).unwrap());
         let mut file = File::create("key.crt").unwrap();
         file.write_all(&crt_key);
+    }
+    pub fn crt_to_public_key(&self){
+        let key = include_bytes!("../key.crt");
+        let crt = X509::from_pem(key).unwrap();
+        println!("{:?}", std::str::from_utf8(&crt.public_key().unwrap().public_key_to_pem().unwrap()).unwrap());
+    }
+    pub fn priv_encryp_pub_decryp(){
+        let pkey = include_bytes!("../key.pem");
+        let private_key = Rsa::private_key_from_pem(pkey).unwrap();
+        let mut result = vec![0; private_key.size() as usize];
+        let original_data = b"This is test";
+        let len = private_key
+            .private_encrypt(original_data, &mut result, Padding::PKCS1)
+            .unwrap();
+        assert_eq!(len, 256);
+
+        let key = include_bytes!("../key.pub.pem");
+        let public_key = Rsa::public_key_from_pem(key).unwrap();
+        let mut dec_result = vec![0; public_key.size() as usize];
+        let len = private_key
+            .public_decrypt(&result, &mut dec_result, Padding::PKCS1)
+            .unwrap();
+
+        println!("{:?}", std::str::from_utf8(&dec_result[..len]));
+        assert_eq!(&dec_result[..len], original_data);
+    }
+    pub fn pub_encryp_priv_decryp(){
+        let key = include_bytes!("../key.pub.pem");
+        let public_key = Rsa::public_key_from_pem(key).unwrap();
+        let mut result = vec![0; public_key.size() as usize];
+        let original_data = b"This is test";
+        let len = public_key
+            .public_encrypt(original_data, &mut result, Padding::PKCS1)
+            .unwrap();
+        assert_eq!(len, 256);
+
+        let pkey = include_bytes!("../key.pem");
+        let private_key = Rsa::private_key_from_pem(pkey).unwrap();
+        let mut dec_result = vec![0; private_key.size() as usize];
+        let len = private_key
+            .private_decrypt(&result, &mut dec_result, Padding::PKCS1)
+            .unwrap();
+
+        println!("{:?}", std::str::from_utf8(&dec_result[..len]));
+        assert_eq!(&dec_result[..len], original_data);
     }
 }
 
