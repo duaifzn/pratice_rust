@@ -65,11 +65,11 @@ impl OpensslGenerator{
             .private_encrypt(original_data, &mut result, Padding::PKCS1)
             .unwrap();
         assert_eq!(len, 256);
-        println!("{:?}", std::str::from_utf8(&result));
+
         let key = include_bytes!("../key.pub.pem");
         let public_key = Rsa::public_key_from_pem(key).unwrap();
         let mut dec_result = vec![0; public_key.size() as usize];
-        let len = private_key
+        let len = public_key
             .public_decrypt(&result, &mut dec_result, Padding::PKCS1)
             .unwrap();
 
