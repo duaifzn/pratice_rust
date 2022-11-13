@@ -1,0 +1,8 @@
+version: '3.9'
+services:
+  binary:
+    container_name: binary
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    image: binary:0.0.1
